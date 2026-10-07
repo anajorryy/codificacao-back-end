@@ -1,0 +1,9 @@
+{
+  "name": "aula-06-networking-e-primeiro-servidor-http",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "servidor.js",
+  "scripts": {
+    "start": "node servidor.js"
+  }
+}
