@@ -1,20 +1,27 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
-import { CreateConvidadoDto } from './dto/create-convidado.dto.js';
+import { Controller, Get, Patch, Delete, Param, Body, HttpCode } from '@nestjs/common';
+import { ConvidadosService } from './convidados.service.js';
 
 @Controller('convidados')
 export class ConvidadosController {
+  constructor(private readonly convidadosService: ConvidadosService) {}
 
   @Get()
-  listarTodos() {
-    return ['Ana', 'Bruno', 'Carlos'];
+  listar() {
+    return this.convidadosService.findAll();
   }
 
-  @Post()
-  criar(@Body() createConvidadoDto: CreateConvidadoDto) {
-    console.log(`[PORTEIRO DIGITAL] Novo convidado recebido: ${createConvidadoDto.nome}`);
-    return {
-      mensagem: `Convidado ${createConvidadoDto.nome} adicionado com sucesso!`,
-      dados: createConvidadoDto,
-    };
+  // Rota PATCH /convidados/:id
+  @Patch(':id')
+  atualizarIdade(@Param('id') id: string, @Body('idade') idade: number) {
+    console.log(`[GESTOR] Atualizando idade do ID: ${id}`);
+    return this.convidadosService.updateIdade(+id, idade); // O '+' converte string para number
+  }
+
+  // Rota DELETE /convidados/:id
+  @Delete(':id')
+  @HttpCode(204) // Define o Status Code 204 No Content
+  remover(@Param('id') id: string) {
+    console.log(`[GESTOR] Removendo convidado ID: ${id}`);
+    this.convidadosService.remove(+id);
   }
 }
